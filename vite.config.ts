@@ -25,6 +25,7 @@ const PAGES: Record<string, string> = {
 const EXTERNAL: Record<string, string> = {
   '/apply': 'https://app.patriothacks.org/',
   '/001': 'https://app.patriothacks.org/001',
+  '/sid': 'https://app.patriothacks.org/sid',
 }
 
 function pageRoutes(): Plugin {
