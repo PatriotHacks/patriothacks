@@ -171,12 +171,18 @@ editing only its `.md` file** — `content/PRIVACY.md` and `content/TERMS.md`.
 Nothing about a document's structure is hardcoded, so headings, tables and
 lists come through as written.
 
-`/apply`, `/001` and `/sid` are not pages — they are 302s off the site to
-<https://app.patriothacks.org/>, <https://app.patriothacks.org/001> and
-<https://app.patriothacks.org/sid>, declared in `redirects` in `vercel.json`,
-`netlify.toml`, and `EXTERNAL` in `vite.config.ts`. Temporary rather than
-permanent so the application host can change between seasons without browsers
-holding a cached redirect.
+`/apply`, `/001`, `/sid` and `/kickoff` are not pages — they are 302s off the
+site, declared in `redirects` in `vercel.json`, `netlify.toml`, and `EXTERNAL`
+in `vite.config.ts`:
+
+- `/apply` → <https://app.patriothacks.org/>
+- `/001` → <https://app.patriothacks.org/001>
+- `/sid` → <https://app.patriothacks.org/sid>
+- `/kickoff` → <https://app.patriothacks.org/sid> — the same target as `/sid`,
+  an intentional alias rather than a `/kickoff` path on the app.
+
+Temporary rather than permanent so the application host can change between
+seasons without browsers holding a cached redirect.
 
 Remember to set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the host's
 environment variables, or the two form pages will ship unconfigured.
