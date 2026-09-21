@@ -59,7 +59,7 @@
 
 [[redirects]]
   from = "/kickoff"
-  to = "https://app.patriothacks.org/sid"
+  to = "https://app.patriothacks.org/kickoff"
   status = 302
   force = true
 

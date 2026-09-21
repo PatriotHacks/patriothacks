@@ -178,8 +178,7 @@ in `vite.config.ts`:
 - `/apply` → <https://app.patriothacks.org/>
 - `/001` → <https://app.patriothacks.org/001>
 - `/sid` → <https://app.patriothacks.org/sid>
-- `/kickoff` → <https://app.patriothacks.org/sid> — the same target as `/sid`,
-  an intentional alias rather than a `/kickoff` path on the app.
+- `/kickoff` → <https://app.patriothacks.org/kickoff>
 
 Temporary rather than permanent so the application host can change between
 seasons without browsers holding a cached redirect.
