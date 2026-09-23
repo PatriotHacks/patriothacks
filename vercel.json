@@ -7,7 +7,8 @@
     { "source": "/apply", "destination": "https://app.patriothacks.org/", "permanent": false },
     { "source": "/001", "destination": "https://app.patriothacks.org/001", "permanent": false },
     { "source": "/sid", "destination": "https://app.patriothacks.org/sid", "permanent": false },
-    { "source": "/kickoff", "destination": "https://app.patriothacks.org/kickoff", "permanent": false }
+    { "source": "/kickoff", "destination": "https://app.patriothacks.org/kickoff", "permanent": false },
+    { "source": "/bitlab", "destination": "https://app.patriothacks.org/bitlab", "permanent": false }
   ],
   "rewrites": [
     { "source": "/sponsor", "destination": "/sponsor.html" },

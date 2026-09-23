@@ -63,6 +63,12 @@
   status = 302
   force = true
 
+[[redirects]]
+  from = "/bitlab"
+  to = "https://app.patriothacks.org/bitlab"
+  status = 302
+  force = true
+
 # SPA fallback (must come last).
 [[redirects]]
   from = "/*"
