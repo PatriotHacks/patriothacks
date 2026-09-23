@@ -39,6 +39,11 @@
 
 # Application — off-site on the app subdomain. 302 rather than 301 so the
 # target can move between seasons without browsers caching the old URL.
+# Netlify's edge normalizes trailing slashes before matching, so each rule
+# below already covers both /apply and /apply/ — adding an explicit slash
+# variant would be a redundant rule that risks an infinite redirect loop.
+# `from` takes no regex, so the case-insensitive matching configured in
+# vercel.json has no equivalent here and these stay exact-case, Vercel only.
 [[redirects]]
   from = "/apply"
   to = "https://app.patriothacks.org/"
@@ -60,6 +65,12 @@
 [[redirects]]
   from = "/kickoff"
   to = "https://app.patriothacks.org/kickoff"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/bitlab"
+  to = "https://app.patriothacks.org/bitlab"
   status = 302
   force = true
 
