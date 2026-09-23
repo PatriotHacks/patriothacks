@@ -172,8 +172,8 @@ Nothing about a document's structure is hardcoded, so headings, tables and
 lists come through as written.
 
 `/apply`, `/001`, `/sid`, `/kickoff` and `/bitlab` are not pages — they are
-302s off the site, declared in `redirects` in `vercel.json`, `netlify.toml`,
-and `EXTERNAL` in `vite.config.ts`:
+temporary redirects off the site, declared in `redirects` in `vercel.json`,
+`netlify.toml`, and `EXTERNAL` in `vite.config.ts`:
 
 - `/apply` → <https://app.patriothacks.org/>
 - `/001` → <https://app.patriothacks.org/001>
@@ -181,8 +181,19 @@ and `EXTERNAL` in `vite.config.ts`:
 - `/kickoff` → <https://app.patriothacks.org/kickoff>
 - `/bitlab` → <https://app.patriothacks.org/bitlab>
 
+On Vercel each of these matches **case-insensitively and with or without a
+trailing slash**, so `/bitlab`, `/BitLab` and `/BITLAB/` all land in the same
+place. Vercel compiles a redirect `source` with `sensitive: true` and
+`strict: true` and offers no option to relax either, so every slug is written
+as a character class (`/([bB][iI][tT][lL][aA][bB])`) and listed twice — once
+bare, once with the trailing slash. Netlify normalizes trailing slashes at the
+edge and its `from` accepts no regex, so the Netlify rules stay single
+exact-case entries; the dev and preview servers lowercase the path before the
+`EXTERNAL` lookup to match Vercel.
+
 Temporary rather than permanent so the application host can change between
-seasons without browsers holding a cached redirect.
+seasons without browsers holding a cached redirect — Vercel sends 307 for
+`"permanent": false`, Netlify the 302 set in `netlify.toml`.
 
 Remember to set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the host's
 environment variables, or the two form pages will ship unconfigured.

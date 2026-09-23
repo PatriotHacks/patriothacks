@@ -36,14 +36,17 @@ function pageRoutes(): Plugin {
     res: { writeHead: (code: number, headers: Record<string, string>) => void; end: () => void },
   ) => {
     // req/res are typed without @types/node here, so narrow to what is used.
-    const path = req.url?.replace(/\/$/, '')
-    const target = path && EXTERNAL[path]
+    const path = req.url?.replace(/[?#].*$/, '').replace(/\/+$/, '') || '/'
+    // Vercel matches the EXTERNAL sources case-insensitively and with or without
+    // a trailing slash, so lowercase before the lookup. The PAGES rewrites stay
+    // case-sensitive here because they are case-sensitive in production too.
+    const target = EXTERNAL[path.toLowerCase()]
     if (target) {
       res.writeHead(302, { Location: target })
       res.end()
       return true
     }
-    const page = path && PAGES[path]
+    const page = PAGES[path]
     if (page) {
       req.url = page
     }
