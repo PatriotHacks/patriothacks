@@ -172,7 +172,7 @@ editing only its `.md` file** — `content/PRIVACY.md` and `content/TERMS.md`.
 Nothing about a document's structure is hardcoded, so headings, tables and
 lists come through as written.
 
-`/apply`, `/001`, `/sid`, `/kickoff`, `/bitlab` and `/zohra` are not pages — they are
+`/apply`, `/001`, `/sid`, `/kickoff`, `/bitlab`, `/zohra` and `/linkedin` are not pages — they are
 temporary redirects off the site, declared in `redirects` in `vercel.json`
 and `EXTERNAL` in `vite.config.ts`:
 
@@ -182,6 +182,7 @@ and `EXTERNAL` in `vite.config.ts`:
 - `/kickoff` → <https://app.patriothacks.org/kickoff>
 - `/bitlab` → <https://app.patriothacks.org/bitlab>
 - `/zohra` → <https://app.patriothacks.org/zohra>
+- `/linkedin` → <https://app.patriothacks.org/linkedin>
 
 On Vercel each of these matches **case-insensitively and with or without a
 trailing slash**, so `/bitlab`, `/BitLab` and `/BITLAB/` all land in the same
