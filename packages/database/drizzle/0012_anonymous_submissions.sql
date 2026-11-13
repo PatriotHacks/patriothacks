@@ -2,9 +2,7 @@
 -- the respondent typed, unique per form; `user_id` is only set when they were
 -- signed in. Drafts no longer exist: the platform inserts a submission and its
 -- answers together, on the service-role connection, so every applicant write
--- policy goes. Existing drafts could never be finished and would hold their
--- owner's email against the new unique constraint, so they are deleted.
-DELETE FROM "submissions" WHERE "status" = 'draft';--> statement-breakpoint
+-- policy goes. Existing drafts are kept so admins can still see them.
 ALTER TABLE "submissions" ALTER COLUMN "user_id" DROP NOT NULL;--> statement-breakpoint
 ALTER TABLE "submissions" ALTER COLUMN "status" SET DEFAULT 'submitted';--> statement-breakpoint
 ALTER TABLE "submissions" ADD COLUMN "respondent_email" text;--> statement-breakpoint
