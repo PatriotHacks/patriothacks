@@ -10,7 +10,7 @@ import {
   type Submission,
 } from "@patriothacks/database";
 import type { FormDefinition, Question, QuestionOption } from "@patriothacks/form-engine";
-import { and, asc, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull } from "drizzle-orm";
 
 /**
  * Reads that hydrate the form engine's plain models from rows the caller's RLS
@@ -24,12 +24,19 @@ export interface LoadedForm {
   definition: FormDefinition;
 }
 
-/** `forms_select_published` is what limits this to published, non-deleted forms. */
+/**
+ * Published, non-deleted forms only. The filter is explicit because anonymous
+ * visitors read through the service-role connection, where no policy applies.
+ */
 export async function loadForm(
   tx: DatabaseTransaction,
   slug: string,
 ): Promise<LoadedForm | null> {
-  const [form] = await tx.select().from(forms).where(eq(forms.slug, slug)).limit(1);
+  const [form] = await tx
+    .select()
+    .from(forms)
+    .where(and(eq(forms.slug, slug), eq(forms.status, "published"), isNull(forms.deletedAt)))
+    .limit(1);
   if (!form) return null;
 
   const sectionRows = await tx
@@ -86,7 +93,6 @@ export async function loadForm(
       helpText: row.helpText,
       position: row.position,
       required: row.required,
-      editableAfterSubmit: row.editableAfterSubmit,
       config: row.config,
       options: optionsByQuestion.get(row.id) ?? [],
     });
@@ -119,7 +125,7 @@ export interface LoadedSubmission {
   answers: Record<string, unknown>;
 }
 
-/** This user's submission for a form, or null when they have not started it. */
+/** This user's submission for a form, or null when they have not submitted it. */
 export async function loadSubmission(
   tx: DatabaseTransaction,
   formId: string,

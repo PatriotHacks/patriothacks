@@ -1,4 +1,3 @@
-import { type Form } from "@patriothacks/database";
 import {
   Button,
   DataList,
@@ -18,12 +17,6 @@ import { formGroup, listForms, type FormGroup, type FormListRow } from "@/lib/fo
 
 import { createDraftForm } from "./actions";
 import { DeleteForm } from "./delete-form";
-
-const EDIT_POLICY: Record<Form["editPolicy"], string> = {
-  locked: "Locked",
-  per_question: "Per question",
-  full: "Full",
-};
 
 function FormsSection({
   heading,
@@ -80,7 +73,6 @@ function FormsSection({
             <TableRow>
               <TableHead>Form</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Edit policy</TableHead>
               <TableHead>Window</TableHead>
               <TableHead className="text-right">Sections</TableHead>
               <TableHead className="text-right">Questions</TableHead>
@@ -100,9 +92,6 @@ function FormsSection({
                 </TableCell>
                 <TableCell>
                   <StatusBadge status={row.status} />
-                </TableCell>
-                <TableCell className="text-muted-foreground whitespace-nowrap">
-                  {EDIT_POLICY[row.editPolicy]}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
                   {formatWindow(row.opensAt, row.closesAt)}

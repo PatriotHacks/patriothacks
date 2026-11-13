@@ -13,7 +13,6 @@ export const TEMPLATE_KEYS = [
   "decision_accepted",
   "decision_waitlisted",
   "decision_rejected",
-  "rsvp_confirmed",
 ] as const;
 
 export type TemplateKey = (typeof TEMPLATE_KEYS)[number];
@@ -24,17 +23,15 @@ export type TemplateKey = (typeof TEMPLATE_KEYS)[number];
  * anything else is rejected.
  */
 export const TEMPLATE_VARIABLES = {
-  decision_accepted: ["full_name", "form_title", "year", "rsvp_url"],
+  decision_accepted: ["full_name", "form_title", "year"],
   decision_waitlisted: ["full_name", "form_title", "year"],
   decision_rejected: ["full_name", "form_title", "year"],
-  rsvp_confirmed: ["full_name", "form_title", "year"],
 } as const satisfies Record<TemplateKey, readonly string[]>;
 
 export const TEMPLATE_LABELS: Record<TemplateKey, string> = {
   decision_accepted: "Decision — accepted",
   decision_waitlisted: "Decision — waitlisted",
   decision_rejected: "Decision — rejected",
-  rsvp_confirmed: "RSVP confirmed",
 };
 
 /**
@@ -102,7 +99,7 @@ export function customTemplateKey(name: string): CustomTemplateKey | null {
 
 /**
  * A custom template may reference only what a broadcast can supply. The built-in
- * keys reference `form_title` and `rsvp_url`, which no broadcast has, so this
+ * keys reference `form_title`, which no broadcast has, so this
  * restriction is exactly what makes an admin's template always sendable.
  */
 export function variablesForCustom(): readonly TemplateVariable[] {
@@ -120,7 +117,6 @@ export function sampleContext(key: MessageKey): TemplateContext {
     email: "ada@example.com",
     form_title: "PatriotHacks Hacker Application",
     year: String(new Date().getUTCFullYear()),
-    rsvp_url: "https://patriothacks.org/rsvp/sample",
     unsubscribe_url: "https://admin.patriothacks.org/unsubscribe?token=sample",
   };
 

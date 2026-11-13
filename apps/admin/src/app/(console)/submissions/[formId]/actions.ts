@@ -59,13 +59,13 @@ export async function setStatusForFilter(
       const matching = tx
         .select({ id: submissions.id })
         .from(submissions)
-        .innerJoin(profiles, eq(profiles.id, submissions.userId))
+        .leftJoin(profiles, eq(profiles.id, submissions.userId))
         .where(where);
 
       const [counted] = await tx
         .select({ total: sql<number>`count(*)::int` })
         .from(submissions)
-        .innerJoin(profiles, eq(profiles.id, submissions.userId))
+        .leftJoin(profiles, eq(profiles.id, submissions.userId))
         .where(where);
       const total = counted?.total ?? 0;
 

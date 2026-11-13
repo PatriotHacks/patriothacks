@@ -41,14 +41,3 @@ export const DECISION_TEMPLATE: Record<DecisionStatus, TemplateKey> = {
   waitlisted: "decision_waitlisted",
   rejected: "decision_rejected",
 };
-
-/**
- * Where an accepted applicant goes to RSVP. The admin app renders the link into
- * an email the platform app has to serve, so the origin has to be configured
- * rather than derived from the request.
- */
-export function rsvpUrl(slug: string): string {
-  const base = process.env.PLATFORM_URL;
-  if (!base) throw new Error("PLATFORM_URL is not set");
-  return `${base.replace(/\/+$/, "")}/${slug}/review`;
-}

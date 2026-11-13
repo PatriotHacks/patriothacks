@@ -96,7 +96,7 @@ async function seedEmailTemplates(db: SeedDb) {
       template(
         "decision_accepted",
         "You're in — PatriotHacks {{year}}",
-        "Hi {{full_name}}, your application to {{form_title}} was accepted. RSVP at {{rsvp_url}}.",
+        "Hi {{full_name}}, your application to {{form_title}} was accepted. We will be in touch with next steps.",
       ),
       template(
         "decision_waitlisted",
@@ -107,11 +107,6 @@ async function seedEmailTemplates(db: SeedDb) {
         "decision_rejected",
         "PatriotHacks {{year}} application update",
         "Hi {{full_name}}, we couldn't offer you a spot at {{form_title}} this time.",
-      ),
-      template(
-        "rsvp_confirmed",
-        "RSVP confirmed — PatriotHacks {{year}}",
-        "Hi {{full_name}}, your spot at {{form_title}} is confirmed. See you there.",
       ),
     ])
     .onConflictDoNothing();
@@ -130,8 +125,6 @@ async function seedSampleForm(db: SeedDb) {
       description: "Apply to attend PatriotHacks. Takes about ten minutes.",
       status: "published",
       visibility: "public",
-      // Exercises questions.editable_after_submit rather than locking everything.
-      editPolicy: "per_question",
       opensAt: now,
       closesAt,
       publishedAt: now,
@@ -231,7 +224,6 @@ async function seedSampleForm(db: SeedDb) {
       label: "What do you hope to learn this weekend?",
       position: 0,
       required: true,
-      editableAfterSubmit: true,
       config: { maxLength: 1500 },
     },
     {
@@ -242,7 +234,6 @@ async function seedSampleForm(db: SeedDb) {
       label: "What did you build at your last hackathon?",
       position: 0,
       required: true,
-      editableAfterSubmit: true,
       config: { maxLength: 1500 },
     },
     {
@@ -287,7 +278,6 @@ async function seedSampleForm(db: SeedDb) {
       label: "T-shirt size",
       position: 3,
       required: true,
-      editableAfterSubmit: true,
     },
   ];
 

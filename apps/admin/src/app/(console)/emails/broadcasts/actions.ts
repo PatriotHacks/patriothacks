@@ -103,8 +103,8 @@ export async function loadNewsletterBody(id: string): Promise<BodySourceResult> 
 
 /**
  * The same thing for a template an admin built, plus the subject it owns. Only
- * custom templates are loadable: a built-in references `form_title` and
- * `rsvp_url`, which a broadcast has no way to fill, so one would fail validation
+ * custom templates are loadable: a built-in references `form_title`,
+ * which a broadcast has no way to fill, so one would fail validation
  * the moment it arrived.
  */
 export async function loadTemplateBody(key: string): Promise<BodySourceResult> {

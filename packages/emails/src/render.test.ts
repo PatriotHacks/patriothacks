@@ -9,16 +9,15 @@ const accepted: StoredTemplate<"decision_accepted"> = {
   key: "decision_accepted",
   subject: "You're in — PatriotHacks {{year}}",
   bodyHtml:
-    "<p>Hi {{full_name}}, your application to {{form_title}} was accepted. RSVP at {{rsvp_url}}.</p>",
+    "<p>Hi {{full_name}}, your application to {{form_title}} was accepted. We will be in touch with next steps.</p>",
   bodyText:
-    "Hi {{full_name}}, your application to {{form_title}} was accepted. RSVP at {{rsvp_url}}.",
+    "Hi {{full_name}}, your application to {{form_title}} was accepted. We will be in touch with next steps.",
 };
 
 const context = {
   full_name: "Ada Lovelace",
   form_title: "Hacker Application",
   year: "2026",
-  rsvp_url: "https://patriothacks.org/rsvp/abc",
 };
 
 describe("renderTemplate", () => {
@@ -30,7 +29,7 @@ describe("renderTemplate", () => {
       "Hi Ada Lovelace, your application to Hacker Application was accepted.",
     );
     expect(email.text).toContain(
-      "Hi Ada Lovelace, your application to Hacker Application was accepted. RSVP at https://patriothacks.org/rsvp/abc.",
+      "Hi Ada Lovelace, your application to Hacker Application was accepted. We will be in touch with next steps.",
     );
     expect(email.html).not.toContain("{{");
     expect(email.text).not.toContain("{{");

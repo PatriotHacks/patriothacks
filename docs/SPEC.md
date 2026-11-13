@@ -1,7 +1,7 @@
 # PatriotHacks Application Platform — Technical Spec
 
-Monorepo containing two apps: a public-facing application platform where users fill out forms,
-and an admin console where organizers build those forms, review responses, and issue decisions.
+Monorepo containing two apps: a public-facing site that serves the PatriotHacks marketing pages and
+the forms users fill out, and an admin console where organizers build those forms, review responses, and issue decisions.
 
 Status: planning complete, implementation not started.
 
@@ -15,7 +15,7 @@ Every choice below was made explicitly. Where a decision is still open it is lis
 |---|---|
 | Repo | pnpm workspaces + Turborepo, two Next.js apps |
 | Hosting | Vercel |
-| DNS | Cloudflare (`app.` and `admin.patriothacks.org`) |
+| DNS | Cloudflare (`patriothacks.org` and `admin.patriothacks.org`) |
 | Database | Supabase Postgres — local Docker for dev, hosted project for prod |
 | Schema | Drizzle ORM owns it; `drizzle-kit generate` + `drizzle-kit migrate` is the only migration tool |
 | Connection | Supavisor transaction-mode pooler (port 6543) at runtime |
@@ -64,7 +64,7 @@ Stated rather than asked. Contradict any of these and the affected section chang
 
 ```
 apps/
-  platform/              app.patriothacks.org
+  platform/              patriothacks.org
   admin/                 admin.patriothacks.org
 packages/
   database/              drizzle schema, migrations, client factory, seed

@@ -13,7 +13,7 @@ import { revalidatePath } from "next/cache";
 
 import { requireAdmin, requireStaff } from "@/lib/auth";
 import { queryAsStaff } from "@/lib/db";
-import { isDecidable, isDecisionStatus, isSettableStatus, rsvpUrl } from "@/lib/decisions";
+import { isDecidable, isDecisionStatus, isSettableStatus } from "@/lib/decisions";
 import { isUuid } from "@/lib/form-definition";
 
 /**
@@ -152,13 +152,12 @@ export async function sendDecisionEmail(
         .select({
           status: submissions.status,
           userId: submissions.userId,
-          email: profiles.email,
+          email: submissions.respondentEmail,
           fullName: profiles.fullName,
           formTitle: forms.title,
-          formSlug: forms.slug,
         })
         .from(submissions)
-        .innerJoin(profiles, eq(profiles.id, submissions.userId))
+        .leftJoin(profiles, eq(profiles.id, submissions.userId))
         .innerJoin(forms, eq(forms.id, submissions.formId))
         .where(eq(submissions.id, submissionId))
         .limit(1);
@@ -194,27 +193,14 @@ export async function sendDecisionEmail(
       const to = row.email;
       const toUserId = row.userId;
 
-      // Split on the one key that declares `rsvp_url`. Handing a template a
-      // variable it does not declare is exactly what `renderTemplate` refuses,
-      // so the two shapes stay two calls rather than one cast.
-      const result =
-        key === "decision_accepted"
-          ? await sendTemplateEmail({
-              tx,
-              provider,
-              template: { key, ...stored },
-              context: { ...base, rsvp_url: rsvpUrl(row.formSlug) },
-              to,
-              toUserId,
-            })
-          : await sendTemplateEmail({
-              tx,
-              provider,
-              template: { key, ...stored },
-              context: base,
-              to,
-              toUserId,
-            });
+      const result = await sendTemplateEmail({
+        tx,
+        provider,
+        template: { key, ...stored },
+        context: base,
+        to,
+        toUserId,
+      });
 
       return result.status === "sent"
         ? { status: "sent", to }

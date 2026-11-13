@@ -1,20 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-/** Reachable without a session. Everything else needs one. */
-const PUBLIC_PREFIXES = ["/login", "/auth"];
+/** Signing in is opt-in: only these need a session, everything else is public. */
+const PROTECTED_PREFIXES = ["/submissions"];
 
-/**
- * The index lists what is open so someone can see whether it is worth making an
- * account. Only this exact path — `/[slug]` still needs a session, and the
- * `forms_select_anon` policy grants `anon` nothing beyond the form rows
- * themselves, so a signed-out visitor can read the list and no more.
- */
-const PUBLIC_PATHS = ["/"];
-
-const isPublic = (pathname: string) =>
-  PUBLIC_PATHS.includes(pathname) ||
-  PUBLIC_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
+const isProtected = (pathname: string) =>
+  PROTECTED_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`));
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -45,7 +36,7 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
 
   const { pathname, search } = request.nextUrl;
-  if (!data?.claims && !isPublic(pathname)) {
+  if (!data?.claims && isProtected(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = "";

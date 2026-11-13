@@ -1,1 +1,132 @@
 @import "@patriothacks/ui/globals.css";
+@plugin "@tailwindcss/typography";
+
+/* Marketing pages (the `(marketing)` route group): George Mason green and gold
+   on white, Geist throughout. Light only, whatever the app theme says. */
+@theme {
+  --color-paper: #ffffff;
+  --color-mist: #f4f6f4;
+  --color-line: #e6e9e6;
+
+  --color-ink: #0f1712;
+  --color-slate: #566159;
+
+  --color-mason: #006633;
+  --color-mason-deep: #004a25;
+  --color-mason-soft: #e4f0e9;
+
+  --color-gold: #ffc629;
+  --color-gold-deep: #e0a500;
+}
+
+@theme inline {
+  --font-display: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html:has(.marketing) {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html:has(.marketing) body {
+    background-color: var(--color-paper);
+  }
+
+  .marketing {
+    min-height: 100svh;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .marketing :focus-visible {
+    outline: 2px solid var(--color-mason);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .marketing ::selection {
+    background: var(--color-gold);
+    color: var(--color-ink);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(.marketing) {
+    scroll-behavior: auto;
+  }
+  .marketing *,
+  .marketing *::before,
+  .marketing *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+/* Legal documents: Markdown from /content rendered through `prose`. */
+.prose-legal {
+  --tw-prose-body: var(--color-slate);
+  --tw-prose-headings: var(--color-ink);
+  --tw-prose-lead: var(--color-slate);
+  --tw-prose-links: var(--color-mason);
+  --tw-prose-bold: var(--color-ink);
+  --tw-prose-counters: var(--color-slate);
+  --tw-prose-bullets: var(--color-mason);
+  --tw-prose-hr: var(--color-line);
+  --tw-prose-quotes: var(--color-ink);
+  --tw-prose-quote-borders: var(--color-mason);
+  --tw-prose-captions: var(--color-slate);
+  --tw-prose-code: var(--color-ink);
+  --tw-prose-pre-bg: var(--color-mist);
+  --tw-prose-pre-code: var(--color-ink);
+  --tw-prose-th-borders: var(--color-line);
+  --tw-prose-td-borders: var(--color-line);
+  max-width: none;
+}
+
+.prose-legal :where(h1) {
+  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.prose-legal :where(a) {
+  text-decoration-color: color-mix(in srgb, var(--color-mason) 40%, transparent);
+  text-underline-offset: 4px;
+}
+
+.prose-legal :where(a):hover {
+  text-decoration-color: var(--color-mason);
+}

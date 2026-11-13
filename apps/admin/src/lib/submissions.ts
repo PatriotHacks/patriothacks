@@ -55,7 +55,7 @@ const ROW_COLUMNS = {
   submittedAt: submissions.submittedAt,
   createdAt: submissions.createdAt,
   updatedAt: submissions.updatedAt,
-  email: profiles.email,
+  email: submissions.respondentEmail,
   fullName: profiles.fullName,
 } as const;
 
@@ -63,7 +63,7 @@ function countRows(tx: DatabaseTransaction, where: SQL) {
   return tx
     .select({ total: sql<number>`count(*)::int` })
     .from(submissions)
-    .innerJoin(profiles, eq(profiles.id, submissions.userId))
+    .leftJoin(profiles, eq(profiles.id, submissions.userId))
     .where(where);
 }
 
@@ -79,7 +79,7 @@ export async function readPage(
   const rows = await tx
     .select(ROW_COLUMNS)
     .from(submissions)
-    .innerJoin(profiles, eq(profiles.id, submissions.userId))
+    .leftJoin(profiles, eq(profiles.id, submissions.userId))
     .where(where)
     .orderBy(submissionOrderBy(query))
     .limit(limit)
@@ -190,7 +190,7 @@ async function readNeighbours(
         total: sql<number>`(count(*) over ())::int`.as("total"),
       })
       .from(submissions)
-      .innerJoin(profiles, eq(profiles.id, submissions.userId))
+      .leftJoin(profiles, eq(profiles.id, submissions.userId))
       .where(where),
   );
 
@@ -238,7 +238,7 @@ export async function loadSubmissionDetail(
     const [submission] = await tx
       .select({ ...ROW_COLUMNS, formId: submissions.formId })
       .from(submissions)
-      .innerJoin(profiles, eq(profiles.id, submissions.userId))
+      .leftJoin(profiles, eq(profiles.id, submissions.userId))
       .where(eq(submissions.id, submissionId))
       .limit(1);
     if (!submission) return null;

@@ -104,7 +104,6 @@ export async function loadFormDefinition(
       helpText: row.helpText,
       position: row.position,
       required: row.required,
-      editableAfterSubmit: row.editableAfterSubmit,
       config: row.config,
       options: optionsByQuestion.get(row.id) ?? [],
     });

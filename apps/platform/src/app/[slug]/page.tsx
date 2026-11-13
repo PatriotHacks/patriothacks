@@ -2,65 +2,58 @@ import { AppShell } from "@patriothacks/ui";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { requireClaims } from "@/lib/auth";
-import { withRls } from "@/lib/db";
-import { SUBMISSION_STATUS_LABELS, windowExplanation, windowState } from "@/lib/editability";
+import { optionalClaims } from "@/lib/auth";
+import { withRls, withServiceRole } from "@/lib/db";
+import { windowExplanation, windowState } from "@/lib/editability";
 import { loadForm, loadSubmission } from "@/lib/form-data";
 
 import { FillForm } from "./fill-form";
-import { ReadOnlyAnswers } from "./read-only-answers";
-import { SiteHeader } from "@/components/site-header";
+import { Header } from "@/components/marketing/header";
 
-/** `[slug]` resolves against `forms.slug`, so `/hacker` is data, not a route. */
+/** `[slug]` resolves against `forms.slug`, so `/volunteer` is data, not a route. */
 export default async function FillPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const claims = await requireClaims();
+  const loaded = await withServiceRole((tx) => loadForm(tx, slug));
+  if (loaded === null) notFound();
 
-  const data = await withRls(claims, async (tx) => {
-    const loaded = await loadForm(tx, slug);
-    if (loaded === null) return null;
-    return { ...loaded, existing: await loadSubmission(tx, loaded.form.id, claims.sub) };
-  });
-  if (data === null) notFound();
-
-  const { form, definition, existing } = data;
+  const { form, definition } = loaded;
   const state = windowState(form);
-  // A closed form has nothing to show someone who never started it.
-  if (state === "after" && existing === null) notFound();
+  if (state === "after") notFound();
   const explanation = windowExplanation(form, state);
 
+  const claims = await optionalClaims();
+  const existing =
+    claims === null
+      ? null
+      : await withRls(claims, (tx) => loadSubmission(tx, form.id, claims.sub));
+
   return (
-    <AppShell header={<SiteHeader />}>
+    <AppShell>
+      <Header />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-6 sm:p-8">
         <div className="flex flex-col gap-2">
-          <Link href="/" className="text-sm text-muted-foreground underline underline-offset-4">
-            All forms
-          </Link>
           <h1 className="text-2xl font-semibold">{form.title}</h1>
           {form.description ? (
             <p className="text-sm text-muted-foreground">{form.description}</p>
           ) : null}
-          {existing ? (
-            <p className="text-sm text-muted-foreground">
-              Status: {SUBMISSION_STATUS_LABELS[existing.submission.status]}
-            </p>
-          ) : null}
         </div>
 
-        {explanation !== null ? (
-          <>
-            <p role="status" className="rounded-md border bg-muted/40 p-3 text-sm">
-              {explanation} Your answers are shown below and cannot be changed.
-            </p>
-            <ReadOnlyAnswers definition={definition} answers={existing?.answers ?? {}} />
-          </>
+        {existing !== null ? (
+          <p role="status" className="rounded-md border bg-muted/40 p-3 text-sm">
+            You have already submitted this form.{" "}
+            <Link href={`/${slug}/review`} className="underline underline-offset-4">
+              View your answers
+            </Link>
+          </p>
+        ) : explanation !== null ? (
+          <p role="status" className="rounded-md border bg-muted/40 p-3 text-sm">
+            {explanation}
+          </p>
         ) : (
           <FillForm
             slug={form.slug}
             definition={definition}
-            editPolicy={form.editPolicy}
-            status={existing?.submission.status ?? null}
-            initialAnswers={existing?.answers ?? {}}
+            initialEmail={typeof claims?.email === "string" ? claims.email : ""}
           />
         )}
       </div>

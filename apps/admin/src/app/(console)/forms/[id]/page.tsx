@@ -7,12 +7,7 @@ import { StatusBadge } from "@/components/status-badge";
 import { requireStaff } from "@/lib/auth";
 import { formatDateTime, formatWindow } from "@/lib/format";
 import { type FormDetail, getFormDetail } from "@/lib/forms";
-
-const EDIT_POLICY: Record<Form["editPolicy"], string> = {
-  locked: "Locked after submit",
-  per_question: "Per question",
-  full: "Fully editable after submit",
-};
+import { formUrl } from "@/lib/site";
 
 /** `short_answer` reads fine as `short answer`; a hand-kept label map would drift. */
 const humanise = (value: string) => value.replaceAll("_", " ");
@@ -86,9 +81,6 @@ function SectionCard({
               <span className="text-sm font-medium">{question.label}</span>
               <Badge variant="outline">{humanise(question.type)}</Badge>
               {question.required ? <Badge variant="secondary">required</Badge> : null}
-              {question.editableAfterSubmit ? (
-                <Badge variant="secondary">editable after submit</Badge>
-              ) : null}
             </div>
 
             {question.helpText ? (
@@ -159,8 +151,12 @@ export default async function FormDetailPage({ params }: { params: Promise<{ id:
 
       <dl className="grid gap-4 text-sm sm:grid-cols-3">
         <div>
-          <dt className="text-muted-foreground">Edit policy</dt>
-          <dd>{EDIT_POLICY[form.editPolicy]}</dd>
+          <dt className="text-muted-foreground">Public link</dt>
+          <dd>
+            <a href={formUrl(form.slug)} className="break-all underline underline-offset-4">
+              {formUrl(form.slug)}
+            </a>
+          </dd>
         </div>
         <div>
           <dt className="text-muted-foreground">Window</dt>

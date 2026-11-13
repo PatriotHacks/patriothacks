@@ -72,7 +72,7 @@ export function submissionConditions(
     const pattern = `%${escapeLike(query.search)}%`;
     conditions.push(
       or(
-        sql`${profiles.email} ilike ${pattern}`,
+        sql`${submissions.respondentEmail} ilike ${pattern}`,
         sql`${profiles.fullName} ilike ${pattern}`,
       ) as SQL,
     );
@@ -90,7 +90,7 @@ const SORT_COLUMNS = {
   submitted_at: submissions.submittedAt,
   created_at: submissions.createdAt,
   updated_at: submissions.updatedAt,
-  email: profiles.email,
+  email: submissions.respondentEmail,
   status: submissions.status,
 } as const;
 

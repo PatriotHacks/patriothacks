@@ -85,6 +85,27 @@
       "when": 1791670607791,
       "tag": "0011_volunteers_judges",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1794527341787,
+      "tag": "0012_anonymous_submissions",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1794527363286,
+      "tag": "0013_volunteer_judge_forms",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1794527411006,
+      "tag": "0014_drop_rsvp_edit_policy_applications",
+      "breakpoints": true
     }
   ]
 }

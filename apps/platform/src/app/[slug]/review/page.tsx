@@ -9,9 +9,9 @@ import { loadForm, loadSubmission } from "@/lib/form-data";
 
 import { ReadOnlyAnswers } from "../read-only-answers";
 
-import { RsvpPanel } from "./rsvp-panel";
-import { SiteHeader } from "@/components/site-header";
+import { Header } from "@/components/marketing/header";
 
+/** A signed-in respondent's own answers. Anonymous respondents get a thank-you instead. */
 export default async function ReviewPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const claims = await requireClaims();
@@ -24,12 +24,11 @@ export default async function ReviewPage({ params }: { params: Promise<{ slug: s
   if (data === null) notFound();
 
   const { form, definition, existing } = data;
-  // Nothing to review until it has been submitted; the fill page is the
-  // right place for a draft.
-  if (existing === null || existing.submission.status === "draft") redirect(`/${slug}`);
+  if (existing === null) redirect(`/${slug}`);
 
   return (
-    <AppShell header={<SiteHeader />}>
+    <AppShell>
+      <Header />
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-6 sm:p-8">
         <div className="flex flex-col gap-2">
           <Link href="/submissions" className="text-sm text-muted-foreground underline underline-offset-4">
@@ -41,21 +40,9 @@ export default async function ReviewPage({ params }: { params: Promise<{ slug: s
             {existing.submission.submittedAt
               ? ` on ${formatDate(existing.submission.submittedAt)}`
               : ""}
+            {` as ${existing.submission.respondentEmail}`}
           </p>
-          {form.editPolicy === "locked" ? null : (
-            <Link href={`/${slug}`} className="text-sm underline underline-offset-4">
-              Edit the answers the organizers left open
-            </Link>
-          )}
         </div>
-
-        {existing.submission.status === "accepted" ? (
-          <RsvpPanel
-            slug={slug}
-            rsvpStatus={existing.submission.rsvpStatus}
-            rsvpAt={existing.submission.rsvpAt}
-          />
-        ) : null}
 
         <ReadOnlyAnswers definition={definition} answers={existing.answers} />
       </div>

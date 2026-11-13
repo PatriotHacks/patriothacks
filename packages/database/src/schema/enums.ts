@@ -6,8 +6,6 @@ export const formStatus = pgEnum("form_status", ["draft", "published", "closed"]
 
 export const formVisibility = pgEnum("form_visibility", ["public", "role", "gated"]);
 
-export const formEditPolicy = pgEnum("form_edit_policy", ["locked", "per_question", "full"]);
-
 /**
  * The 11 supported question types. `packages/form-engine` registers one entry per
  * value; the two lists must stay identical.
@@ -39,8 +37,6 @@ export const submissionStatus = pgEnum("submission_status", [
   "rejected",
   "withdrawn",
 ]);
-
-export const rsvpStatus = pgEnum("rsvp_status", ["pending", "confirmed", "declined"]);
 
 export const revisionReason = pgEnum("revision_reason", ["edit", "branch_discarded"]);
 

@@ -6,14 +6,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 
 import {
-  AUDIENCE_RSVP_STATUSES,
   AUDIENCE_STATUSES,
   EMPTY_FILTER,
-  RSVP_LABELS,
   STATUS_LABELS,
   type AudienceCount,
   type AudienceFilter,
-  type AudienceRsvpStatus,
   type AudienceStatus,
 } from "@/lib/broadcast-audience";
 
@@ -32,8 +29,8 @@ const EMPTY_DRAFT: BroadcastDraft = { name: "", subject: "", bodyHtml: "", bodyT
 /**
  * Where the body comes from. A one-off is written here; the other two are
  * compiled on the server and copied in, after which the broadcast owns them.
- * Built-in templates are deliberately absent — they reference `form_title` and
- * `rsvp_url`, which no broadcast can fill.
+ * Built-in templates are deliberately absent — they reference `form_title`,
+ * which no broadcast can fill.
  */
 type BodySource = "manual" | "template" | "newsletter";
 
@@ -314,25 +311,6 @@ export function BroadcastComposer({
                 setFilter((current) => ({
                   ...current,
                   statuses: toggle<AudienceStatus>(current.statuses, status),
-                }))
-              }
-            />
-          ))}
-        </fieldset>
-
-        <fieldset className="flex flex-col gap-2">
-          <legend className="text-sm font-medium">RSVP</legend>
-          <p className="text-xs text-muted-foreground">None checked means any RSVP state.</p>
-          {AUDIENCE_RSVP_STATUSES.map((rsvp) => (
-            <CheckRow
-              key={rsvp}
-              id={`rsvp-${rsvp}`}
-              label={RSVP_LABELS[rsvp]}
-              checked={filter.rsvpStatuses.includes(rsvp)}
-              onToggle={() =>
-                setFilter((current) => ({
-                  ...current,
-                  rsvpStatuses: toggle<AudienceRsvpStatus>(current.rsvpStatuses, rsvp),
                 }))
               }
             />

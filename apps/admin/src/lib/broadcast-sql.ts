@@ -34,16 +34,13 @@ function audienceConditions(filter: AudienceFilter): SQL {
 
   if (filter.formId) conditions.push(eq(submissions.formId, filter.formId));
   if (filter.statuses.length > 0) conditions.push(inArray(submissions.status, filter.statuses));
-  if (filter.rsvpStatuses.length > 0) {
-    conditions.push(inArray(submissions.rsvpStatus, filter.rsvpStatuses));
-  }
 
   return and(...conditions) as SQL;
 }
 
 /**
  * The unsubscribe exclusion, written once and applied to every path that can
- * result in an email. Transactional decision and RSVP mail deliberately does
+ * result in an email. Transactional decision mail deliberately does
  * not import this — a rejection notice is not marketing.
  */
 const notUnsubscribed = sql`not exists (

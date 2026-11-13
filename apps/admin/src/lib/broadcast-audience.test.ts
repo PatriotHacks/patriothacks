@@ -8,12 +8,10 @@ describe("parseAudienceFilter", () => {
       parseAudienceFilter({
         formId: "11111111-1111-1111-1111-111111111111",
         statuses: ["accepted", "waitlisted"],
-        rsvpStatuses: ["confirmed"],
       }),
     ).toEqual({
       formId: "11111111-1111-1111-1111-111111111111",
       statuses: ["accepted", "waitlisted"],
-      rsvpStatuses: ["confirmed"],
     });
   });
 
@@ -43,20 +41,18 @@ describe("parseAudienceFilter", () => {
 });
 
 describe("describeAudience", () => {
-  it("names the form, the statuses and the RSVP states", () => {
+  it("names the form and the statuses", () => {
     expect(
       describeAudience(
         {
           formId: "11111111-1111-1111-1111-111111111111",
           statuses: ["accepted"],
-          rsvpStatuses: ["confirmed"],
         },
         "Hacker Application",
       ),
     ).toEqual([
       "Applied to Hacker Application",
       "Status: Accepted",
-      "RSVP: RSVP confirmed",
     ]);
   });
 

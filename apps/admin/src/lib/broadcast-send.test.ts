@@ -46,7 +46,7 @@ const UNSUBSCRIBED = 40;
 const userId = (n: number) => id(1000 + n);
 const emailFor = (n: number) => `broadcast-test-${n}@example.invalid`;
 
-const filter: AudienceFilter = { formId: FORM_ID, statuses: [], rsvpStatuses: [] };
+const filter: AudienceFilter = { formId: FORM_ID, statuses: [] };
 
 const stubProvider = (): EmailProvider & { calls: string[] } => {
   const calls: string[] = [];
@@ -110,6 +110,7 @@ async function seed() {
     Array.from({ length: POPULATION }, (_, n) => ({
       formId: FORM_ID,
       userId: userId(n),
+      respondentEmail: emailFor(n),
       status: "submitted" as const,
       submittedAt: new Date(),
     })),

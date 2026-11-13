@@ -10,11 +10,7 @@ export async function requireClaims() {
   return data.claims;
 }
 
-/**
- * Claims when there is a session, null when there is not. The index uses this
- * because it renders either way: signed out it lists what is open, signed in it
- * says where each application stands.
- */
+/** Claims when there is a session, null when there is not, for pages that render either way. */
 export async function optionalClaims() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getClaims();

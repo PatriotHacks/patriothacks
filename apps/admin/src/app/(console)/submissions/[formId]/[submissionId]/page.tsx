@@ -270,15 +270,6 @@ export default async function SubmissionDetailPage({
               lastAttempt={lastAttempt}
             />
           ) : null}
-
-          {decision?.rsvpStatus ? (
-            <section className="rounded-lg border p-4">
-              <h2 className="font-medium">RSVP</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {decision.rsvpStatus} · {formatDateTime(decision.rsvpAt)}
-              </p>
-            </section>
-          ) : null}
         </div>
 
         <ReviewNotes
