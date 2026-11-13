@@ -141,7 +141,7 @@ export async function getTemplate(key: string): Promise<StoredTemplateRow | null
 
 /**
  * The picker in the broadcast composer. Built-ins are never offered: they
- * reference `form_title` and `rsvp_url`, which no broadcast can fill.
+ * reference `form_title`, which no broadcast can fill.
  */
 export async function listCustomTemplateChoices(): Promise<{ key: string; name: string }[]> {
   const rows = await queryAsAdmin((tx) =>

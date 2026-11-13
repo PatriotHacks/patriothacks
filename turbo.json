@@ -13,11 +13,9 @@
     "SUPABASE_SERVICE_ROLE_KEY",
     "RESEND_API_KEY",
     "EMAIL_FROM",
-    "PLATFORM_URL",
+    "SITE_URL",
     "UNSUBSCRIBE_SECRET",
-    "NEXT_PUBLIC_AUTH_PROVIDERS",
-    "VITE_SUPABASE_URL",
-    "VITE_SUPABASE_ANON_KEY"
+    "NEXT_PUBLIC_AUTH_PROVIDERS"
   ],
   "tasks": {
     "dev": {
@@ -31,8 +29,7 @@
       "outputs": [
         ".next/**",
         "!.next/cache/**",
-        ".open-next/**",
-        "dist/**"
+        ".open-next/**"
       ]
     },
     "lint": {

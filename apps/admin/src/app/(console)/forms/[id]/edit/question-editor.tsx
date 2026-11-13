@@ -305,13 +305,12 @@ export function QuestionEditor({
   const [label, setLabel] = useSynced(question.label);
   const [helpText, setHelpText] = useSynced(question.helpText ?? "");
 
-  const save = (patch: { label?: string; required?: boolean; editableAfterSubmit?: boolean } = {}) =>
+  const save = (patch: { label?: string; required?: boolean } = {}) =>
     run(() =>
       updateQuestion(formId, question.id, {
         label,
         helpText,
         required: question.required,
-        editableAfterSubmit: question.editableAfterSubmit,
         ...patch,
       }),
     );
@@ -440,18 +439,6 @@ export function QuestionEditor({
                 />
                 <Label htmlFor={`question-${question.id}-required`} className="font-normal">
                   Required
-                </Label>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id={`question-${question.id}-editable`}
-                  checked={question.editableAfterSubmit}
-                  disabled={pending}
-                  onCheckedChange={(checked) => save({ editableAfterSubmit: checked === true })}
-                />
-                <Label htmlFor={`question-${question.id}-editable`} className="font-normal">
-                  Editable after submit
                 </Label>
               </div>
             </div>

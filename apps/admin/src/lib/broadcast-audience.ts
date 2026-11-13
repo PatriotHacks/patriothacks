@@ -1,4 +1,4 @@
-import type { rsvpStatus, submissionStatus } from "@patriothacks/database";
+import type { submissionStatus } from "@patriothacks/database";
 
 /**
  * What `broadcasts.audience_filter` holds, and what the builder edits.
@@ -13,7 +13,6 @@ import type { rsvpStatus, submissionStatus } from "@patriothacks/database";
  */
 
 export type SubmissionStatus = (typeof submissionStatus.enumValues)[number];
-export type RsvpStatus = (typeof rsvpStatus.enumValues)[number];
 
 /**
  * A draft is not an application, so it is never an audience. Every other
@@ -29,15 +28,8 @@ export const AUDIENCE_STATUSES = [
   "withdrawn",
 ] as const satisfies readonly SubmissionStatus[];
 
-export const AUDIENCE_RSVP_STATUSES = [
-  "pending",
-  "confirmed",
-  "declined",
-] as const satisfies readonly RsvpStatus[];
-
 /** The statuses an audience may name — `draft` is deliberately not one. */
 export type AudienceStatus = (typeof AUDIENCE_STATUSES)[number];
-export type AudienceRsvpStatus = (typeof AUDIENCE_RSVP_STATUSES)[number];
 
 export const STATUS_LABELS: Record<AudienceStatus, string> = {
   submitted: "Submitted",
@@ -48,19 +40,11 @@ export const STATUS_LABELS: Record<AudienceStatus, string> = {
   withdrawn: "Withdrawn",
 };
 
-export const RSVP_LABELS: Record<AudienceRsvpStatus, string> = {
-  pending: "RSVP pending",
-  confirmed: "RSVP confirmed",
-  declined: "RSVP declined",
-};
-
 export type AudienceFilter = {
   /** A single form, or null for every form. */
   formId: string | null;
   /** Empty means "any non-draft status". Otherwise an OR across the list. */
   statuses: AudienceStatus[];
-  /** Empty means "any RSVP state, including none". Otherwise an OR. */
-  rsvpStatuses: AudienceRsvpStatus[];
 };
 
 export type AudienceCount = {
@@ -72,7 +56,7 @@ export type AudienceCount = {
   recipients: number;
 };
 
-export const EMPTY_FILTER: AudienceFilter = { formId: null, statuses: [], rsvpStatuses: [] };
+export const EMPTY_FILTER: AudienceFilter = { formId: null, statuses: [] };
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -96,7 +80,6 @@ export function parseAudienceFilter(value: unknown): AudienceFilter {
   return {
     formId,
     statuses: only(AUDIENCE_STATUSES, raw.statuses),
-    rsvpStatuses: only(AUDIENCE_RSVP_STATUSES, raw.rsvpStatuses),
   };
 }
 
@@ -108,10 +91,6 @@ export function describeAudience(filter: AudienceFilter, formTitle: string | nul
 
   if (filter.statuses.length > 0) {
     parts.push(`Status: ${filter.statuses.map((s) => STATUS_LABELS[s]).join(", ")}`);
-  }
-
-  if (filter.rsvpStatuses.length > 0) {
-    parts.push(`RSVP: ${filter.rsvpStatuses.map((s) => RSVP_LABELS[s]).join(", ")}`);
   }
 
   return parts;

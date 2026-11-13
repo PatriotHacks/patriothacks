@@ -6,6 +6,7 @@ import {
   forms,
   questionOptions,
   questions,
+  isReservedSlug,
   type DatabaseTransaction,
   type Form,
 } from "@patriothacks/database";
@@ -40,8 +41,6 @@ export type ActionResult =
   | { ok: false; message: string; needsAnswerConfirmation?: number };
 
 const OK: ActionResult = { ok: true };
-
-const EDIT_POLICIES = ["locked", "per_question", "full"] as const;
 
 /**
  * The single gate every mutation passes through.
@@ -364,7 +363,6 @@ export interface MetaInput {
   title: string;
   slug: string;
   description: string;
-  editPolicy: string;
   opensAt: string;
   closesAt: string;
 }
@@ -380,8 +378,8 @@ export async function updateMeta(formId: string, input: MetaInput): Promise<Acti
       message: "The slug must be lowercase letters and numbers separated by hyphens.",
     };
   }
-  if (!(EDIT_POLICIES as readonly string[]).includes(input.editPolicy)) {
-    return { ok: false, message: "Unknown edit policy." };
+  if (isReservedSlug(slug)) {
+    return { ok: false, message: `"${slug}" is a page on the site and cannot be a form slug.` };
   }
 
   const opensAt = toInstant(input.opensAt);
@@ -393,7 +391,7 @@ export async function updateMeta(formId: string, input: MetaInput): Promise<Acti
     return { ok: false, message: "The form must open before it closes." };
   }
 
-  // Not structural: the title, slug, window and edit policy carry no edges, so
+  // Not structural: the title, slug and window carry no edges, so
   // no graph can be broken by writing them.
   return withForm(formId, async (tx) => {
     const [taken] = await tx
@@ -409,7 +407,6 @@ export async function updateMeta(formId: string, input: MetaInput): Promise<Acti
         title,
         slug,
         description: input.description.trim() || null,
-        editPolicy: input.editPolicy as Form["editPolicy"],
         opensAt,
         closesAt,
       })
@@ -684,7 +681,6 @@ export async function updateQuestion(
     label: string;
     helpText: string;
     required: boolean;
-    editableAfterSubmit: boolean;
   },
 ): Promise<ActionResult> {
   const label = input.label.trim();
@@ -697,7 +693,6 @@ export async function updateQuestion(
         label,
         helpText: input.helpText.trim() || null,
         required: input.required,
-        editableAfterSubmit: input.editableAfterSubmit,
         updatedAt: new Date(),
       })
       .where(and(eq(questions.id, questionId), eq(questions.formId, formId)));

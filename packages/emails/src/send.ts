@@ -17,7 +17,7 @@ const reason = (cause: unknown) => (cause instanceof Error ? cause.message : Str
  * outage must not also erase the evidence that a decision was mailed.
  *
  * `email_unsubscribes` is deliberately not consulted *here*. Transactional
- * decision and RSVP notices are not marketing — a rejection notice is owed to
+ * decision notices are not marketing — a rejection notice is owed to
  * the applicant whatever their broadcast preference. Broadcasts respect the
  * list, and they do it by never handing an unsubscribed recipient to this
  * function: the exclusion belongs to audience resolution, where it is one

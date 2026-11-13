@@ -40,7 +40,6 @@ export function makeQuestion<T extends QuestionType>(
     helpText: null,
     position: counter,
     required: false,
-    editableAfterSubmit: false,
     config: {},
     options: [],
     ...overrides,

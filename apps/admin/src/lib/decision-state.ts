@@ -7,8 +7,7 @@ import { isUuid } from "@/lib/form-definition";
 
 /**
  * What the decision panel needs and the grid never loads: who decided and when,
- * where the applicant's RSVP stands, and what happened the last time each
- * notice was mailed.
+ * and what happened the last time each notice was mailed.
  *
  * Read separately from `loadSubmissionDetail` on purpose — the grid shares that
  * loader's row shape, and three columns only the detail view uses do not belong
@@ -26,8 +25,6 @@ export interface EmailAttempt {
 export interface DecisionState {
   decidedAt: Date | null;
   decidedByEmail: string | null;
-  rsvpStatus: "pending" | "confirmed" | "declined" | null;
-  rsvpAt: Date | null;
   /** Latest attempt per template key, sent or failed. */
   sends: Map<TemplateKey, EmailAttempt>;
 }
@@ -40,11 +37,9 @@ export async function loadDecisionState(submissionId: string): Promise<DecisionS
   return queryAsStaff(async (tx) => {
     const [row] = await tx
       .select({
-        applicantId: submissions.userId,
+        respondentEmail: submissions.respondentEmail,
         decidedAt: submissions.decidedAt,
         decidedByEmail: decider.email,
-        rsvpStatus: submissions.rsvpStatus,
-        rsvpAt: submissions.rsvpAt,
       })
       .from(submissions)
       .leftJoin(decider, eq(decider.id, submissions.decidedBy))
@@ -65,7 +60,7 @@ export async function loadDecisionState(submissionId: string): Promise<DecisionS
       .from(emailSends)
       .where(
         and(
-          eq(emailSends.toUserId, row.applicantId),
+          eq(emailSends.toEmail, row.respondentEmail),
           inArray(emailSends.templateKey, [...TEMPLATE_KEYS]),
         ),
       )
@@ -83,7 +78,7 @@ export async function loadDecisionState(submissionId: string): Promise<DecisionS
       }
     }
 
-    const { applicantId: _applicantId, ...state } = row;
+    const { respondentEmail: _respondentEmail, ...state } = row;
     return { ...state, sends };
   });
 }

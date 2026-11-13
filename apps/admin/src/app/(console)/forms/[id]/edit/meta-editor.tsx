@@ -1,19 +1,13 @@
 "use client";
 
 import type { Form } from "@patriothacks/database";
-import { Button, Input, Select, Textarea } from "@patriothacks/ui";
+import { Button, Input, Textarea } from "@patriothacks/ui";
 import { useState } from "react";
 
 import { SLUG_PATTERN } from "@/lib/slug";
 
 import { updateMeta } from "./actions";
 import { Field, useAction } from "./controls";
-
-const EDIT_POLICIES: { value: Form["editPolicy"]; label: string }[] = [
-  { value: "locked", label: "Locked once submitted" },
-  { value: "per_question", label: "Only questions marked editable" },
-  { value: "full", label: "Fully editable after submit" },
-];
 
 /**
  * `datetime-local` carries no zone and the console reads and writes Eastern, so
@@ -44,7 +38,6 @@ export function MetaEditor({ form }: { form: Form }) {
     title: form.title,
     slug: form.slug,
     description: form.description ?? "",
-    editPolicy: form.editPolicy as string,
     opensAt: toInputValue(form.opensAt),
     closesAt: toInputValue(form.closesAt),
   });
@@ -83,21 +76,7 @@ export function MetaEditor({ form }: { form: Form }) {
         />
       </Field>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Field id="meta-edit-policy" label="Edit policy">
-          <Select
-            id="meta-edit-policy"
-            value={draft.editPolicy}
-            onChange={(event) => set({ editPolicy: event.target.value })}
-          >
-            {EDIT_POLICIES.map((policy) => (
-              <option key={policy.value} value={policy.value}>
-                {policy.label}
-              </option>
-            ))}
-          </Select>
-        </Field>
-
+      <div className="grid gap-4 sm:grid-cols-2">
         <Field id="meta-opens-at" label="Opens (ET)">
           <Input
             id="meta-opens-at"

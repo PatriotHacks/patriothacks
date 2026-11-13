@@ -1,12 +1,14 @@
 import { forms, submissions } from "@patriothacks/database";
-import { AppShell } from "@patriothacks/ui";
+import { AppShell, Button } from "@patriothacks/ui";
 import { and, desc, eq, isNull } from "drizzle-orm";
 import Link from "next/link";
 
 import { requireClaims } from "@/lib/auth";
 import { withRls } from "@/lib/db";
 import { SUBMISSION_STATUS_LABELS, formatDate } from "@/lib/editability";
-import { SiteHeader } from "@/components/site-header";
+import { Header } from "@/components/marketing/header";
+
+import { signOut } from "../actions";
 
 export default async function SubmissionsPage() {
   const claims = await requireClaims();
@@ -37,17 +39,21 @@ export default async function SubmissionsPage() {
   const rows = all.filter((row) => !seen.has(row.formId) && seen.add(row.formId));
 
   return (
-    <AppShell header={<SiteHeader />}>
+    <AppShell>
+      <Header />
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-6 sm:p-8">
-        <div className="flex flex-col gap-2">
-          <Link href="/" className="text-sm text-muted-foreground underline underline-offset-4">
-            All forms
-          </Link>
-          <h1 className="text-2xl font-semibold">Your submissions</h1>
+        <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
+          <p className="min-w-0 max-w-full truncate text-sm">{claims.email}</p>
+          <form action={signOut}>
+            <Button type="submit" variant="outline" size="sm">
+              Sign out
+            </Button>
+          </form>
         </div>
+        <h1 className="text-2xl font-semibold">Your submissions</h1>
 
         {rows.length === 0 ? (
-          <p className="text-sm text-muted-foreground">You have not started an application yet.</p>
+          <p className="text-sm text-muted-foreground">You have not submitted anything while signed in yet.</p>
         ) : (
           <ul className="flex flex-col divide-y rounded-md border">
             {rows.map((row) => (
@@ -60,10 +66,10 @@ export default async function SubmissionsPage() {
                   </span>
                 </div>
                 <Link
-                  href={row.status === "draft" ? `/${row.slug}` : `/${row.slug}/review`}
+                  href={`/${row.slug}/review`}
                   className="shrink-0 whitespace-nowrap text-sm underline underline-offset-4"
                 >
-                  {row.status === "draft" ? "Continue" : "View"}
+                  View
                 </Link>
               </li>
             ))}

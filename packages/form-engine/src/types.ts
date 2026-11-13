@@ -74,7 +74,6 @@ export interface Question<T extends QuestionType = QuestionType> {
   helpText: string | null;
   position: number;
   required: boolean;
-  editableAfterSubmit: boolean;
   config: unknown;
   options: QuestionOption[];
 }

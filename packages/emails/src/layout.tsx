@@ -50,7 +50,7 @@ const unsubscribeLink = { color: "#6b7280", textDecoration: "underline" };
  * `unsubscribeUrl` is supplied for broadcasts and omitted for transactional
  * mail. The link lives in the shell rather than in the authored body so a
  * broadcast cannot ship without one — forgetting it is not an option an author
- * has. Transactional decision and RSVP notices are owed to the applicant
+ * has. Transactional decision notices are owed to the applicant
  * regardless of their broadcast preference, so they carry no link at all.
  */
 export function EmailLayout({

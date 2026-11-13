@@ -33,7 +33,7 @@ export function UnsubscribeForm({
           <strong>{email}</strong> will not receive announcement emails.
         </p>
         <p className="text-sm text-muted-foreground">
-          Decision and RSVP emails about your application still go out — those are not
+          Decision emails about your application still go out — those are not
           announcements, and opting out of them is not something we offer.
         </p>
       </div>
@@ -46,7 +46,7 @@ export function UnsubscribeForm({
         Stop sending announcement emails to <strong>{email}</strong>?
       </p>
       <p className="text-sm text-muted-foreground">
-        Decision and RSVP emails about your application will still be sent.
+        Decision emails about your application will still be sent.
       </p>
       {error ? <p className="text-sm text-destructive">{error}</p> : null}
       <div>

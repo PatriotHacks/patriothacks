@@ -22,7 +22,6 @@ export function listForms() {
         slug: forms.slug,
         title: forms.title,
         status: forms.status,
-        editPolicy: forms.editPolicy,
         opensAt: forms.opensAt,
         closesAt: forms.closesAt,
         sectionCount: tx.$count(formSections, eq(formSections.formId, forms.id)),

@@ -14,7 +14,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { authenticatedRole } from "drizzle-orm/supabase";
 
-import { branchAction, formEditPolicy, formStatus, formVisibility, optionKind, questionType } from "./enums.ts";
+import { branchAction, formStatus, formVisibility, optionKind, questionType } from "./enums.ts";
 import { profiles } from "./identity.ts";
 import { isAdmin, isOrganizer } from "./predicates.ts";
 
@@ -33,7 +33,6 @@ export const forms = pgTable(
     description: text("description"),
     status: formStatus("status").default("draft").notNull(),
     visibility: formVisibility("visibility").default("public").notNull(),
-    editPolicy: formEditPolicy("edit_policy").default("locked").notNull(),
     opensAt: timestamp("opens_at", { withTimezone: true }),
     closesAt: timestamp("closes_at", { withTimezone: true }),
     publishedAt: timestamp("published_at", { withTimezone: true }),
@@ -122,7 +121,6 @@ export const questions = pgTable(
     helpText: text("help_text"),
     position: integer("position").notNull(),
     required: boolean("required").default(false).notNull(),
-    editableAfterSubmit: boolean("editable_after_submit").default(false).notNull(),
     config: jsonb("config"),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
