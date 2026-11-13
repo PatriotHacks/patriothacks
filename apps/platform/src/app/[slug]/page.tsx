@@ -18,7 +18,22 @@ export default async function FillPage({ params }: { params: Promise<{ slug: str
 
   const { form, definition } = loaded;
   const state = windowState(form);
-  if (state === "after") notFound();
+  if (state === "after") {
+    return (
+      <div className="flex h-[100svh] flex-col bg-paper">
+        <Header />
+        <main className="flex flex-1 items-center justify-center px-6">
+          <p className="max-w-md text-center text-lg text-ink sm:text-xl">
+            This event has passed. Go to our{" "}
+            <Link href="/" className="underline decoration-line underline-offset-4 transition hover:decoration-ink">
+              homepage
+            </Link>{" "}
+            to see what events we&apos;re having next!
+          </p>
+        </main>
+      </div>
+    );
+  }
   const explanation = windowExplanation(form, state);
 
   const claims = await optionalClaims();
