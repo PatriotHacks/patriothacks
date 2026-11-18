@@ -43,7 +43,7 @@ export default function HomePage() {
       <Shimmer className="flex flex-1 items-center justify-center overflow-hidden">
         <pre
           aria-hidden
-          className="m-0 shrink-0 leading-none text-ink select-none"
+          className="m-0 shrink-0 leading-none text-ink select-none contain-content"
           style={handStyle(HANDS_LEFT_COLS, HANDS_LEFT_TIP)}
           dangerouslySetInnerHTML={{ __html: toHtml(HANDS_LEFT) }}
         />
@@ -52,7 +52,7 @@ export default function HomePage() {
         </h1>
         <pre
           aria-hidden
-          className="m-0 shrink-0 leading-none text-ink select-none"
+          className="m-0 shrink-0 leading-none text-ink select-none contain-content"
           style={handStyle(HANDS_RIGHT_COLS, HANDS_RIGHT_TIP)}
           dangerouslySetInnerHTML={{ __html: toHtml(HANDS_RIGHT) }}
         />

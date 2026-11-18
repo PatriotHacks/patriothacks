@@ -38,10 +38,9 @@ export function LogoMarquee({
               <Image
                 src={s.logo}
                 alt={s.name}
-                width={0}
-                height={0}
+                width={s.width}
+                height={s.height}
                 unoptimized
-                loading="eager"
                 className="w-auto object-contain"
                 style={{ height: `${size * (s.scale ?? 1)}px` }}
               />
