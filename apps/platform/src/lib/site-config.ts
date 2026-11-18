@@ -1,6 +1,7 @@
 export const CONTACT_EMAIL = "patriothacksgmu@gmail.com";
 
 export const PAGE_LINKS = [
+  { href: "/about", label: "About" },
   { href: "https://patriothackfest.com", label: "Hackathon" },
   { href: "/sponsors", label: "Sponsors" },
   { href: "/events", label: "Events" },
