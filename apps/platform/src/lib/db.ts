@@ -25,7 +25,7 @@ export async function withRls<T>(
 /**
  * Forms are anonymous, so reading a published form and inserting a submission
  * cannot go through RLS: there is no session to carry. This is the one
- * service-role entry point, used only by `loadPublishedForm` and `submitForm`,
+ * service-role entry point, used only by published-form reads and `submitForm`,
  * which re-validate everything the browser sent before writing it.
  */
 export async function withServiceRole<T>(

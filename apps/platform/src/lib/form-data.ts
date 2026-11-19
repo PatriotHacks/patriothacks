@@ -10,7 +10,7 @@ import {
   type Submission,
 } from "@patriothacks/database";
 import type { FormDefinition, Question, QuestionOption } from "@patriothacks/form-engine";
-import { and, asc, eq, inArray, isNull } from "drizzle-orm";
+import { and, asc, eq, gte, inArray, isNull, or, sql } from "drizzle-orm";
 
 /**
  * Reads that hydrate the form engine's plain models from rows the caller's RLS
@@ -118,6 +118,22 @@ export async function loadForm(
       })),
     },
   };
+}
+
+/** Published, public, non-deleted forms that have not closed, for the events listing. */
+export async function listOpenForms(tx: DatabaseTransaction): Promise<Form[]> {
+  return tx
+    .select()
+    .from(forms)
+    .where(
+      and(
+        eq(forms.status, "published"),
+        eq(forms.visibility, "public"),
+        isNull(forms.deletedAt),
+        or(isNull(forms.closesAt), gte(forms.closesAt, sql`now()`)),
+      ),
+    )
+    .orderBy(asc(forms.opensAt), asc(forms.createdAt));
 }
 
 export interface LoadedSubmission {
