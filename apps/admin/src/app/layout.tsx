@@ -22,6 +22,7 @@ const sans = Figtree({
 export const metadata: Metadata = {
   title: "PatriotHacks Admin",
   description: "Build forms, review responses, issue decisions.",
+  icons: { icon: { url: "/favicon.png", type: "image/png", sizes: "512x512" } },
 };
 
 export default function RootLayout({
